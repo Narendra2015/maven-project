@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'make' (1)
+                sh 'build' (1)
                 archiveArtifacts artifacts: '**/target/*.war', fingerprint: true (2)
             }
         }
