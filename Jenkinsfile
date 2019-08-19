@@ -1,13 +1,29 @@
-pipeline {
-    agent any
+pipeline{
+   agent any
+      stages{
+        stage ('compile stage'){
 
-    stages {
-        stage('Build') {
-            steps {
-                sh 'build' (1)
-                archiveArtifacts artifacts: '**/target/*.war', fingerprint: true (2)
-            }
+         steps{
+            withMaven(maven : 'Maven') {
+              sh 'mvn clean compile'
+             }
+         }
+       }
+       stage ('Testing stage') {
+
+        step{
+          withMaven(maven : 'Maven'){
+           sh 'mvn test'
+          }
+         }
         }
-    }
-}
+          stage ('deployment stage') {
 
+        step{
+          withMaven(maven : 'Maven'){
+           sh 'mvn deploy'
+          }
+         }
+        }
+     }
+   }
